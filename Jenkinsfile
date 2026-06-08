@@ -19,6 +19,8 @@ pipeline {
         }
         stage('Run Container & Health Check') {
             steps {
+                sh 'docker stop test-container || true'
+                sh 'docker rm test-container || true'
                 sh 'docker run -d -p 8080:8080 --name test-container $IMAGE_NAME:$BUILD_NUMBER'
                 sh 'sleep 5'
                 sh 'curl http://localhost:8080/health'

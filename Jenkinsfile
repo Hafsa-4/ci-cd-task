@@ -21,9 +21,9 @@ pipeline {
             steps {
                 sh 'docker stop test-container || true'
                 sh 'docker rm test-container || true'
-                sh 'docker run -d -p 8080:8080 --name test-container $IMAGE_NAME:$BUILD_NUMBER'
+                sh 'docker run -d -p 3000:8080 --name test-container $IMAGE_NAME:$BUILD_NUMBER'
                 sh 'sleep 5'
-                sh 'curl http://localhost:8080/health'
+                sh 'curl http://localhost:3000/health'
                 sh 'docker stop test-container'
                 sh 'docker rm test-container'
             }
@@ -39,9 +39,9 @@ pipeline {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@100.31.161.88 "
-                        docker stop myapp || true
-                        docker rm myapp || true
-                        docker pull hafsa017/ci-cd-task:${BUILD_NUMBER}
+                        docker stop myapp || true &&
+                        docker rm myapp || true &&
+                        docker pull hafsa017/ci-cd-task:${BUILD_NUMBER} &&
                         docker run -d -p 8080:8080 --name myapp hafsa017/ci-cd-task:${BUILD_NUMBER}
                         "
                     '''

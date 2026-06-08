@@ -16,4 +16,6 @@ jobs:
       - name: Run tests
         run: npm test
       - name: Validate Docker build
-        run: docker build -f Dockerfile -t ci-cd-task .
+        run: |
+          ls -la
+          docker build -f Dockerfile -t ci-cd-task .
